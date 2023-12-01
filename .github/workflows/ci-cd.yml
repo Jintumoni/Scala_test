@@ -6,6 +6,10 @@ on:
       - master
       - 'feature/*'
 
+env:
+  MAJOR: 1
+  MINOR: 0
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -23,38 +27,43 @@ jobs:
       - name: Run Scala Tests
         run: sbt test
 
-#    build:
-#      needs: test
-#      runs-on: ubuntu-latest
-#
-#      steps:
-#        - name: Checkout Repository
-#          uses: actions/checkout@v2
-#
-#        - name: Set up JDK
-#          uses: actions/setup-java@v2
-#          with:
-#            distribution: 'adopt'
-#            java-version: '11'
-#
-#        - name: Run Scala Tests
-#          run: sbt clean assembly
-#
-#        - name: Upload the JAR to Github Releases
-#          uses: actions/upload-artifact@v2
-#          with:
-#            name: test-scala-application
-#            path: target/scala-2.12/
+    build:
+      needs: test
+      runs-on: ubuntu-latest
+
+      steps:
+        - name: Checkout Repository
+          uses: actions/checkout@v2
+
+        - name: Set up JDK
+          uses: actions/setup-java@v2
+          with:
+            distribution: 'adopt'
+            java-version: '11'
+
+        - name: Clean
+          run: sbt clean
+
+        - name: Create JAR
+          run: sbt assembly
+
+        - name: Upload the JAR to Github Releases
+          uses: actions/upload-artifact@v2
+          with:
+            name: test-scala-application
+            path: target/scala-2.12/
 
   deploy:
-    needs: test
+    needs: build
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
-      - name: Upload JAR
+      - name: Upload to Artifactory
         run: |
           chmod +x deployer.sh 
           ./deployer.sh
