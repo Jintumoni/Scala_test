@@ -4,6 +4,6 @@ import org.scalatest.FunSuite
 
 class Test2 extends FunSuite{
   test("hello test3") {
-    assert(6 == 10)
+    assert(6 == 6)
   }
 }

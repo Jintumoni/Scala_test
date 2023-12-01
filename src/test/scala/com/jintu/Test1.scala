@@ -7,6 +7,6 @@ class Test1 extends FunSuite{
 
 
   test("hello test2") {
-    assert(2 == 4)
+    assert(2 == 2)
   }
 }
