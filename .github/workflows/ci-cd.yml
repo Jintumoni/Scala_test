@@ -27,31 +27,31 @@ jobs:
       - name: Run Scala Tests
         run: sbt test
 
-    build:
-      needs: test
-      runs-on: ubuntu-latest
+  build:
+    needs: test
+    runs-on: ubuntu-latest
 
-      steps:
-        - name: Checkout Repository
-          uses: actions/checkout@v2
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
 
-        - name: Set up JDK
-          uses: actions/setup-java@v2
-          with:
-            distribution: 'adopt'
-            java-version: '11'
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '11'
 
-        - name: Clean
-          run: sbt clean
+      - name: Clean
+        run: sbt clean
 
-        - name: Create JAR
-          run: sbt assembly
+      - name: Create JAR
+        run: sbt assembly
 
-        - name: Upload the JAR to Github Releases
-          uses: actions/upload-artifact@v2
-          with:
-            name: test-scala-application
-            path: target/scala-2.12/
+      - name: Upload the JAR to Github Releases
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-scala-application
+          path: target/scala-2.12/
 
   deploy:
     needs: build
