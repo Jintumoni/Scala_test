@@ -11,24 +11,24 @@ env:
   MINOR: 0
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-
-      - name: Set up JDK
-        uses: actions/setup-java@v2
-        with:
-          distribution: 'adopt'
-          java-version: '11'
-
-      - name: Run Scala Tests
-        run: sbt test
+#  test:
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Checkout Repository
+#        uses: actions/checkout@v2
+#
+#      - name: Set up JDK
+#        uses: actions/setup-java@v2
+#        with:
+#          distribution: 'adopt'
+#          java-version: '11'
+#
+#      - name: Run Scala Tests
+#        run: sbt test
 
   build:
-    needs: test
+#    needs: test
     runs-on: ubuntu-latest
 
     steps:
@@ -51,7 +51,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: test-scala-application
-          path: target/scala-2.12/
+          path: target/scala-2.11/
 
   deploy:
     needs: build

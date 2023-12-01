@@ -1,4 +1,4 @@
-VERSION=$(git log oneline | wc -l)
+VERSION=$(git log --oneline | wc -l)
 if [[ "${GITHUB_REF}" == "refs/heads/master" ]]; then
   echo "Deploying in prod env..."
   VERSION="$MAJOR.$MINOR.$VERSION-RELEASE"
@@ -8,7 +8,7 @@ else
 fi
 
 JAR=$(basename target/scala-2.12/*.jar .jar)"."$VERSION
-echo "JAR : JAR"
+echo "JAR : $JAR"
 
 # Upload JAR to S3
 echo "Uploading " $JAR " to " s3://jintu-demo-s3/$JAR
