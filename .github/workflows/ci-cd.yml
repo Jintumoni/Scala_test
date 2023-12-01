@@ -46,15 +46,15 @@ jobs:
 #            name: test-scala-application
 #            path: target/scala-2.12/
 
-    deploy:
-      needs: test
-      runs-on: ubuntu-latest
-      steps:
-        - name: Upload JAR
-          run: ./deployer.sh
-          env:
-            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-            AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Upload JAR
+        run: ./deployer.sh
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
 
 
