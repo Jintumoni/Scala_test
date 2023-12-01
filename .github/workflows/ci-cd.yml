@@ -1,0 +1,60 @@
+name: CI/CD Pipeline 🔥
+
+on:
+  push:
+    branches:
+      - master
+      - 'feature/*'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '11'
+
+      - name: Run Scala Tests
+        run: sbt test
+
+#    build:
+#      needs: test
+#      runs-on: ubuntu-latest
+#
+#      steps:
+#        - name: Checkout Repository
+#          uses: actions/checkout@v2
+#
+#        - name: Set up JDK
+#          uses: actions/setup-java@v2
+#          with:
+#            distribution: 'adopt'
+#            java-version: '11'
+#
+#        - name: Run Scala Tests
+#          run: sbt clean assembly
+#
+#        - name: Upload the JAR to Github Releases
+#          uses: actions/upload-artifact@v2
+#          with:
+#            name: test-scala-application
+#            path: target/scala-2.12/
+
+    deploy:
+      needs: test
+      runs-on: ubuntu-latest
+      steps:
+        - name: Upload JAR
+          run: ./deployer.sh
+          env:
+            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+
+
