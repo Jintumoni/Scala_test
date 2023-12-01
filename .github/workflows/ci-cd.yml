@@ -55,7 +55,9 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Upload JAR
-        run: ./deployer.sh
+        run: |
+          chmod +x deployer.sh 
+          ./deployer.sh
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
