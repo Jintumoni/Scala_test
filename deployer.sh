@@ -1,4 +1,3 @@
-pwd
 VERSION=$(git log --oneline | wc -l)
 if [[ "${GITHUB_REF}" == "refs/heads/master" ]]; then
   echo "Deploying in prod env..."
@@ -13,5 +12,6 @@ echo "JAR : $JAR"
 
 # Upload JAR to S3
 echo "Uploading " $JAR " to " s3://jintu-demo-s3/$JAR
-aws s3 cp  path/to/artifacts/*.jar s3://jintu-demo-s3/$JAR
+aws s3 cp path/to/artifacts/*.jar s3://jintu-demo-s3/$JAR
+echo "hello-from-github-actions" | aws s3 cp - s3://jintu-demo-s3/your-file-name.txt
 echo "Successfully upload $JAR to S3"
