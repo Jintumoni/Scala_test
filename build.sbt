@@ -9,7 +9,8 @@ ThisBuild / scalaVersion := "2.11.7"
 
 lazy val app = (project in file("."))
   .settings(
-    assembly / assemblyJarName := s"scala-test.jar"
+    assembly / assemblyJarName := s"scala-test.jar",
+    assembly / test := {}
   )
 
 val testDependencies = Seq(

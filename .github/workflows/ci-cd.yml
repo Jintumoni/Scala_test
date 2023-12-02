@@ -50,8 +50,9 @@ jobs:
       - name: Upload the JAR to Github Releases
         uses: actions/upload-artifact@v2
         with:
-          name: test-scala-application
+          name: jar-artifact
           path: target/scala-2.11/
+          retention-days: 5
 
   deploy:
     needs: build
@@ -62,6 +63,12 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
+
+      - name: Download the artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: jar-artifact
+          path: path/to/artifacts
 
       - name: Upload to Artifactory
         run: |

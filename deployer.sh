@@ -1,3 +1,4 @@
+ls -al
 VERSION=$(git log --oneline | wc -l)
 if [[ "${GITHUB_REF}" == "refs/heads/master" ]]; then
   echo "Deploying in prod env..."
@@ -7,7 +8,7 @@ else
   VERSION="$MAJOR.$MINOR.$VERSION-SNAPSHOT"
 fi
 
-JAR=$(basename target/scala-2.11/*.jar .jar)"."$VERSION".jar"
+JAR=$(basename path/to/artifacts/*.jar .jar)"."$VERSION".jar"
 echo "JAR : $JAR"
 
 # Upload JAR to S3
