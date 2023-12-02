@@ -70,7 +70,7 @@ jobs:
           name: jar-artifact
           path: path/to/artifacts
 
-      - name: Upload to Artifactory
+      - name: Upload to S3
         run: |
           chmod +x deployer.sh 
           ./deployer.sh
