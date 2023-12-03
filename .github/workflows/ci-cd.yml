@@ -6,61 +6,80 @@ on:
       - master
       - 'feature/*'
 
+env:
+  MAJOR: 1
+  MINOR: 0
+
 jobs:
-  test:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-
-      - name: Set up JDK
-        uses: actions/setup-java@v2
-        with:
-          distribution: 'adopt'
-          java-version: '11'
-
-      - name: Run Scala Tests
-        run: sbt test
-
-#    build:
-#      needs: test
-#      runs-on: ubuntu-latest
+#  test:
+#    runs-on: ubuntu-latest
 #
-#      steps:
-#        - name: Checkout Repository
-#          uses: actions/checkout@v2
+#    steps:
+#      - name: Checkout Repository
+#        uses: actions/checkout@v2
 #
-#        - name: Set up JDK
-#          uses: actions/setup-java@v2
-#          with:
-#            distribution: 'adopt'
-#            java-version: '11'
+#      - name: Set up JDK
+#        uses: actions/setup-java@v2
+#        with:
+#          distribution: 'adopt'
+#          java-version: '11'
 #
-#        - name: Run Scala Tests
-#          run: sbt clean assembly
+#      - name: Run Scala Tests
+#        run: sbt test
+
+#  build:
+##    needs: test
+#    runs-on: ubuntu-latest
 #
-#        - name: Upload the JAR to Github Releases
-#          uses: actions/upload-artifact@v2
-#          with:
-#            name: test-scala-application
-#            path: target/scala-2.12/
+#    steps:
+#      - name: Checkout Repository
+#        uses: actions/checkout@v2
+#
+#      - name: Set up JDK
+#        uses: actions/setup-java@v2
+#        with:
+#          distribution: 'adopt'
+#          java-version: '11'
+#
+#      - name: Clean
+#        run: sbt clean
+#
+#      - name: Create JAR
+#        run: sbt assembly
+#
+#      - name: Upload the JAR to Github Releases
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: jar-artifact
+#          path: target/scala-2.11/
+#          retention-days: 5
 
   deploy:
-    needs: test
+#    needs: build
     runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.ref == 'refs/heads/master' && 'prod' || 'dev' }}
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+#
+#      - name: Download the artifact
+#        uses: actions/download-artifact@v2
+#        with:
+#          name: jar-artifact
+#          path: path/to/artifacts
 
-      - name: Upload JAR
+      - name: Upload to S3
         run: |
           chmod +x deployer.sh 
           ./deployer.sh
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          ENV: ${{ vars.ENV }}
 
 
 
